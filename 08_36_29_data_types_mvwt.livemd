@@ -1,0 +1,295 @@
+# Data Types
+
+## Atom
+
+```elixir
+:error
+```
+
+```elixir
+{:error, reason} = {:error, "file not found"}
+```
+
+```elixir
+{:ok, msg} = {:ok, "Status 200 ok"}
+```
+
+## Strings
+
+```elixir
+name = "Kevin"
+name
+```
+
+```elixir
+is_binary(name)
+```
+
+```elixir
+msg = "Hello " <> name
+```
+
+```elixir
+"Hello " <> name = msg
+name
+```
+
+```elixir
+<<head, rest::binary>> = name
+head
+```
+
+```elixir
+head == ?K
+```
+
+```elixir
+<<"K", rest::binary>> = name
+rest
+```
+
+```elixir
+<<"Ke", rest::binary>> = name
+rest
+```
+
+```elixir
+<<head::binary-size(2), rest::binary>> = name
+head
+```
+
+## Charlist
+
+```elixir
+chars = 'Kevin'
+```
+
+```elixir
+'Hello ' ++ chars
+```
+
+```elixir
+is_list(chars)
+```
+
+```elixir
+?a
+```
+
+## Process
+
+```elixir
+my_pid = self()
+my_pid
+```
+
+## Lists - Singly linked lists
+
+```elixir
+list = ["a", "b", "c"]
+```
+
+```elixir
+Enum.at(list, 0)
+```
+
+```elixir
+[first, second, third] = list
+```
+
+```elixir
+second
+```
+
+```elixir
+[_, _, third] = ["a", "b", "c"]
+```
+
+```elixir
+third
+```
+
+```elixir
+hd(list)
+```
+
+```elixir
+tl(list)
+```
+
+```elixir
+[h | t] = list
+```
+
+```elixir
+h
+```
+
+```elixir
+t
+```
+
+## Tuple
+
+```elixir
+{a, b} = {1, 2}
+a
+```
+
+```elixir
+{:reply, msg, state} = {:reply, "Kevin found!", ["Octalium", "Louis", "Chiko"]}
+state
+```
+
+## Keyword List
+
+```elixir
+data = [a: 1, b: 2]
+```
+
+```elixir
+[{:a, 1}] = [a: 1]
+```
+
+```elixir
+data[:a]
+```
+
+## Map
+
+```elixir
+my_map = %{a: 2, b: 2, c: 3}
+my_map
+```
+
+```elixir
+%{a: first, b: second, c: third} = my_map
+```
+
+```elixir
+%{b: second} = my_map
+```
+
+```elixir
+my_map.a
+```
+
+```elixir
+map2 = %{"a" => 1, "b" => 2, "c" => 3}
+```
+
+```elixir
+%{"c" => c} = map2
+c
+```
+
+```elixir
+map2 = %{map2 | "c" => 4}
+```
+
+## Struct
+
+```elixir
+defmodule User do
+  defstruct username: "", email: "", age: nil
+end
+```
+
+```elixir
+user1 = %User{username: "Kevin", email: "kevinnelsonnaidoo@gmail.com", age: 26}
+```
+
+```elixir
+%{username: username} = user1
+username
+```
+
+```elixir
+user1 = %{user1 | age: 32}
+user1
+```
+
+## Case
+
+```elixir
+list = [1, 2, 3]
+```
+
+```elixir
+case Enum.at(list, 2) do
+  1 -> "This wont print"
+  3 -> "3 is a match?"
+  _ -> "Catch all"
+end
+```
+
+```elixir
+defmodule Post do
+  defstruct(
+    id: nil,
+    title: "",
+    description: "",
+    author: ""
+  )
+end
+```
+
+```elixir
+post1 = %Post{id: 1, title: "Title No 1", author: "Julius Caesar"}
+```
+
+```elixir
+case post1 do
+  %{author: "Kevin"} -> "Got a post from Kevin"
+  %{author: "Veloashan Naidoo"} -> "Got a post from Velo"
+  _ -> "Got a post from #{post1.author}"
+end
+```
+
+```elixir
+post1 = %{post1 | author: "Kevin"}
+```
+
+```elixir
+case post1 do
+  %{author: "Kevin"} -> "Got a post from Kevin"
+  %{author: "Veloashan Naidoo"} -> "Got a post from Velo"
+  _ -> "Got a post from #{post1.author}"
+end
+```
+
+## Condition
+
+```elixir
+cond do
+  post1.author == "Kevin" -> "Editing a post from Kevin"
+  post1.author == "Anil Kulkarni" -> "Editing a post from Anil Kulkarni"
+  true -> "This is a catch all"
+end
+```
+
+```elixir
+cond do
+  hd(list) == 1 -> "Got a 1"
+  true -> "Head is #{hd(list)}"
+end
+```
+
+## If/Else
+
+```elixir
+if true do
+  "This will work"
+else
+  "Else this will work"
+end
+```
+
+To create a project from git bash run: <br>
+mkdir <new directory\> <br>
+cd <new directory\><br>
+mix new <project name\><br>
+
+```elixir
+
+```
