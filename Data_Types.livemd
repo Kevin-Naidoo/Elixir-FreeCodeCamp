@@ -10,7 +10,7 @@ An **atom** is a variable whose value is its name.<br> For Example: <br> :Kevin 
 
 ```elixir
 :error
-```
+r``
 
 **Atoms used within a tuple:**
 
@@ -388,53 +388,6 @@ else
   "Else this will work"
 end
 ```
+## End of File
 
-**To create a project from git bash run: <br>
-mkdir <new directory\> <br>
-cd <new directory\><br>
-mix new <project name\><br>**
-
-```elixir
-
-```
-
-```elixir
-defmodule Tutorials.Recursion.PrintDigits do
-  def upto(0) do
-    :ok
-  end
-
-  def upto(num) do
-    # num 3 -> 0, 1, 2, 3
-    IO.puts(num)
-    upto(num - 1)
-  end
-end
-```
-
-```elixir
-printNumbers = Tutorials.Recursion.PrintDigits.upto(6)
-```
-
-```elixir
-defmodule Tutorials.Recursion.PrintDigits2 do
-  # Base Case
-  def upto(0) do
-    IO.puts(0)
-  end
-
-  def upto(num) do
-    # num 3 -> 0, 1, 2, 3
-    upto(num - 1)
-    IO.puts(num)
-  end
-end
-```
-
-```elixir
-alias Tutorials.Recursion.PrintDigits2
-```
-
-```elixir
-printNumbers = Tutorials.Recursion.PrintDigits2.upto(3)
-```
+EOF
