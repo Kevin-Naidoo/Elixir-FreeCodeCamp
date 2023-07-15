@@ -1,0 +1,54 @@
+# Mix Project
+
+## Recursion:
+
+**RECURSION** is a key function at the core of elixir.
+
+```elixir
+defmodule PrintDigits.Descending do
+  # Base Case
+  def upto(0) do
+    IO.puts(0)
+  end
+
+  # Here we  demonstrate tail Recursion
+  # counting 3->2->1->0
+  def upto(num) do
+    IO.puts(num)
+    upto(num - 1)
+  end
+end
+```
+
+```elixir
+count_down = PrintDigits.Descending.upto(3)
+```
+
+Quite a few things have happened here:<br>
+
+* We have defined a function initially by using **defmodule**.
+* We use the **#** operator to write comments.
+* We have used a **Base Case** which returns **0**.
+* We use a recursive call and have no command afterwards thus successful implementation of **Tail Recursion**.
+
+```elixir
+defmodule PrintDigits.Ascending do
+  def upto(0), do: IO.puts(0)
+
+  def upto(num) do
+    upto(num - 1)
+    IO.puts(num)
+  end
+end
+```
+
+```elixir
+count_up = PrintDigits.Ascending.upto(3)
+```
+
+Now we print in ascending order using **Head Recursion** where there is commands after the recursive call.
+
+* An inline command is used as a base case thus the use of **end** is negated.
+* **Head Recursion** queues processes on the stack and thus uses up memeory.
+* **Tail Recursion** does not take up space on the stack due to immediate execution and is more favourable.
+* The **Base Case** is written on top because teh compiler reads from the top down.
