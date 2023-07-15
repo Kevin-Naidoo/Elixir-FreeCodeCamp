@@ -1,8 +1,23 @@
 # Mix Project
 
+```elixir
+Mix.install([
+  {:kino_maplibre, "~> 0.1.7"}
+])
+```
+
 ## Recursion:
 
 **RECURSION** is a key function at the core of elixir.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Quite a few things have happened here:<br>
+
+* We have defined a function initially by using **defmodule**.
+* We use the **#** operator to write comments.
+* We have used a **Base Case** which returns **0**.
+* We use a recursive call and have no command afterwards thus successful implementation of **Tail Recursion**.
 
 ```elixir
 defmodule PrintDigits.Descending do
@@ -24,12 +39,12 @@ end
 count_down = PrintDigits.Descending.upto(3)
 ```
 
-Quite a few things have happened here:<br>
+Now we print in ascending order using **Head Recursion** where there is commands after the recursive call.
 
-* We have defined a function initially by using **defmodule**.
-* We use the **#** operator to write comments.
-* We have used a **Base Case** which returns **0**.
-* We use a recursive call and have no command afterwards thus successful implementation of **Tail Recursion**.
+* An inline command is used as a base case thus the use of **end** is negated.
+* **Head Recursion** queues processes on the stack and thus uses up memeory.
+* **Tail Recursion** does not take up space on the stack due to immediate execution and is more favourable.
+* The **Base Case** is written on top because teh compiler reads from the top down.
 
 ```elixir
 defmodule PrintDigits.Ascending do
@@ -46,9 +61,92 @@ end
 count_up = PrintDigits.Ascending.upto(3)
 ```
 
-Now we print in ascending order using **Head Recursion** where there is commands after the recursive call.
+The function below is niether a head nor a tail recursive funtion.
 
-* An inline command is used as a base case thus the use of **end** is negated.
-* **Head Recursion** queues processes on the stack and thus uses up memeory.
-* **Tail Recursion** does not take up space on the stack due to immediate execution and is more favourable.
-* The **Base Case** is written on top because teh compiler reads from the top down.
+```elixir
+defmodule SumDigits do
+  def upto(0) do
+    0
+  end
+
+  def upto(num) do
+    num + upto(num - 1)
+  end
+end
+```
+
+```elixir
+sum_digits = SumDigits.upto(3)
+```
+
+Lets alter it to be a favourable tail recursive function:
+
+```elixir
+defmodule SumDigits_tail do
+  def upto_tail_rec(0, acc) do
+    acc
+  end
+
+  def upto_tail_rec(num, acc) do
+    upto_tail_rec(num - 1, acc + num)
+  end
+end
+```
+
+```elixir
+sum_digits = SumDigits_tail.upto_tail_rec(3, 0)
+```
+
+Now we have defined 2 parameters: the **number** and an **accumulator**.
+
+* The function now works in a tail recursive fashion.
+* This reduces stack utilisation.
+* The **accumulator** allows us to achieve this by storing the previous sum and iterative addition of the current num value.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Now lets set a default value for the **accumulator** in the case when a single parameter of num is enetered.
+
+```elixir
+defmodule SumDigits_tail2 do
+  def upto_tail_rec(num, acc \\ 0)
+
+  def upto_tail_rec(0, acc) do
+    acc
+  end
+
+  def upto_tail_rec(num, acc) do
+    upto_tail_rec(num - 1, acc + num)
+  end
+end
+```
+
+```elixir
+sum_digits = SumDigits_tail2.upto_tail_rec(3)
+```
+
+The process of making multiple function definitions with the same function name is called **function overloading** and is often distinguished by a combination of varying data types or number of parameters inserted. **Function overloading** takes into account a range of parameter inputs while still being able to run the function correctly.
+
+<!-- livebook:{"break_markdown":true} -->
+
+**Factorial Function**
+
+```elixir
+defmodule Factorial do
+  def upto(num, acc \\ 1)
+
+  def upto(0, acc) do
+    acc
+  end
+
+  def upto(num, acc) do
+    upto(num - 1, acc * num)
+  end
+end
+```
+
+```elixir
+factorial = Factorial.upto(5)
+```
+
+It will be good to put in safe guards to prevent the function from breaking, such the user inserting an accumulator as 0.
