@@ -43,6 +43,11 @@ defmodule Lists do
 
   Function Summary:
   1. sum
+  2. reverse
+  3. map
+  4. concat
+    4.1 concat_func
+  5. 
   """
 
   @doc """
@@ -195,4 +200,60 @@ Piping the list into the map function then inputting the transformation.
 
 ```elixir
 map_list = [1, 2, 3, 4] |> Map_func2.map(fn x -> x * 3 end)
+```
+
+**Concatination of Lists:**
+
+<!-- livebook:{"break_markdown":true} -->
+
+Initially the source list **src** needs to be reversed since we are inserting into the haed of the destination list **dst**.
+
+* We make a auxillary function **concat_func**<br>
+  * This allows us to pipe the **src** list into the reverse function.
+  * This is done in the parameter of **concat_func**.
+  * The **concat_func** is reserved for internal use and is made private by using the **defp** definintion instead of **def**.
+
+```elixir
+defmodule Concat_lists do
+  @spec concat([any()], [any()]) :: [any()]
+  def concat(src, dst) do
+    concat_func(src |> ReverseList.reverse(), dst)
+  end
+
+  defp concat_func([], dst) do
+    dst
+  end
+
+  defp concat_func([h | t], dst) do
+    concat_func(t, [h | dst])
+  end
+end
+```
+
+```elixir
+concat_list = Concat_lists.concat([1, 2, 3, 4], [5, 6, 7, 8])
+```
+
+**Flat Maps**<br>
+
+* **Flat Maps** are functions that map the given function over an enumerable iteration and flattens the result.<br>
+* This means the resulting list as a result of the transformation is singular in nature.<br>
+* A **Flat Map** is essentially a combination of the map and concat functions.
+
+```elixir
+defmodule FlatMap do
+  def flat_map(elements, func, acc \\ [])
+
+  def flat_map([], _, acc) do
+    acc
+  end
+
+  def flat_map([h | t], func, acc) do
+    flat_map(t, func, Concat_lists.concat(acc, func.(h)))
+  end
+end
+```
+
+```elixir
+flat_map1 = FlatMap.flat_map([:a, :b, :c], fn x -> [x, x] end)
 ```
