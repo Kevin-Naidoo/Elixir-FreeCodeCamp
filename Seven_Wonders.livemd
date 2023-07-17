@@ -1,0 +1,212 @@
+# Seven Wonders
+
+## A deeper look into Structs
+
+```elixir
+defmodule SevenWonders do
+  defstruct name: "", country: ""
+
+  @type t :: %SevenWonders{
+          name: String.t(),
+          country: String.t()
+        }
+  @spec all :: [t()]
+  def all() do
+    [
+      %SevenWonders{name: "Taj Mahal", country: "India"},
+      %SevenWonders{name: "Chichen Itza", country: "Mexico"},
+      %SevenWonders{name: "Petra", country: "Jordan"},
+      %SevenWonders{name: "Machu Picchu", country: "Peru"},
+      %SevenWonders{name: "Christ the Redeemer", country: "Brazil"},
+      %SevenWonders{name: "Colosseum", country: "Italy"},
+      %SevenWonders{name: "The Great Wall of China", country: "China"}
+    ]
+  end
+
+  @spec print_names([t()]) :: :ok
+  def print_names(wonders) do
+    wonders |> Enum.each(fn %{name: name} -> IO.puts(name) end)
+  end
+
+  @spec filter_by_country([t()], String.t()) :: [t()]
+  def filter_by_country(wonders, country) do
+    wonders |> Enum.filter(fn %{country: country_name} -> country_name == country end)
+  end
+
+  @spec in_countries_starting_with_i([t()]) :: [t()]
+  def in_countries_starting_with_i(wonders) do
+    wonders
+    |> Enum.filter(fn %{country: country_name} -> String.starts_with?(country_name, "I") end)
+  end
+
+  @spec sort_by_country_length([t()]) :: [t()]
+  def sort_by_country_length(wonders) do
+    wonders |> Enum.sort(fn x, y -> String.length(x.country) < String.length(y.country) end)
+  end
+
+  @spec name_country_list([t()]) :: [t()]
+  def name_country_list(wonders) do
+    wonders |> Enum.reduce([], fn wonder, acc -> [[wonder.name, wonder.country] | acc] end)
+  end
+
+  @spec country_name_keyword_list([t()]) :: [{t()}]
+  def country_name_keyword_list(wonders) do
+    wonders
+    |> Enum.reduce([], fn wonder, acc -> [{String.to_atom(wonder.name), wonder.country} | acc] end)
+  end
+
+  def all_names(wonders) do
+    for %{name: name} <- wonders do
+      name
+    end
+  end
+end
+```
+
+A list is produced.
+
+* Each entry of the list is a struct of type t.
+* The struct has elements, name and country. Both are of type string using **@type**.
+
+```elixir
+seven_wonders = SevenWonders.all()
+```
+
+**Enum.each**:<br>
+def each(`enumerable`, `fun`)
+
+@spec each(t(), (element() -> any())) :: :ok
+
+Invokes the given `fun` for each element in the `enumerable`.
+
+Returns `:ok`.
+
+**Examples**
+
+```
+Enum.each(["some", "example"], fn x -> IO.puts(x) end)
+"some"
+"example"
+#=> :ok
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Using the `print_name` function:<br>
+
+* The name of each wonder is extracted from the **SevenWonders** struct in the list **all()**.
+
+```elixir
+wonder_names = SevenWonders.print_names(seven_wonders)
+```
+
+## Filtering
+
+def filter(enumerable, fun)
+
+@spec filter(t(), (element() -> as_boolean(term()))) :: list()
+
+Filters the `enumerable`, i.e. returns only those elements for which `fun`
+returns a truthy value.
+
+See also `reject/2` which discards all elements where the function returns a
+truthy value.
+
+**Examples**
+
+```
+iex> Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+[2]
+```
+
+Keep in mind that `filter` is not capable of filtering and transforming an
+element at the same time. If you would like to do so, consider using
+`flat_map/2`. For example, if you want to convert all strings that represent an
+integer and discard the invalid one in one pass:
+
+```
+strings = ["1234", "abc", "12ab"]
+
+Enum.flat_map(strings, fn string ->
+  case Integer.parse(string) do
+    # transform to integer
+    {int, _rest} -> [int]
+    # skip the value
+    :error -> []
+  end
+end)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Through the `filter_by_country` function, we can find the corresponding Seven Wonder in that country.
+
+```elixir
+country_find = SevenWonders.filter_by_country(seven_wonders, "Brazil")
+```
+
+A country entered that does not have one of the Seven Wonders returns and empty list []
+
+```elixir
+country_field2 = SevenWonders.filter_by_country(seven_wonders, "South Africa")
+```
+
+Filtering by alphabet using the built in functionality from strings `String.starts_with?()`<br>
+
+Returns `true` if string starts with any of the prefixes given.
+
+prefix can be either a **string, a list of strings, or a compiled pattern**.
+
+```elixir
+country_I = SevenWonders.in_countries_starting_with_i(seven_wonders)
+```
+
+## Sorting
+
+Sorts the `enumerable` according to Erlang's term ordering.
+
+This function uses the merge sort algorithm. Do not use this function to sort
+structs, see `sort/2` for more information.
+
+```elixir
+alpha_sort = SevenWonders.sort_by_country_length(seven_wonders)
+```
+
+**Enum.reduce()**
+
+<!-- livebook:{"break_markdown":true} -->
+
+Reduce (sometimes called `fold`) is a basic building block in functional
+programming. Almost all of the functions in the `Enum` module can be
+implemented on top of reduce. Those functions often rely on other operations,
+such as `Enum.reverse/1`, which are optimized by the runtime.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Here we use the `Enum.reduce()` function to extract the name and country of each seven wonder into a list of lists. The resulting list  lists the seven wonders in the reverse order from the input list. Thus `Enum.reduce()` is often paired with `Enum.reverse()` to maintain the original order of the list.
+
+```elixir
+name_country_list = SevenWonders.name_country_list(seven_wonders)
+```
+
+```elixir
+name_country_keywordlist = SevenWonders.country_name_keyword_list(seven_wonders)
+```
+
+```elixir
+Enum.map(seven_wonders, fn wonder -> wonder.name end)
+```
+
+```elixir
+for %{name: name} <- seven_wonders, do: name
+```
+
+```elixir
+Enum.map(seven_wonders, & &1.name)
+```
+
+For
+
+```elixir
+names_extract = SevenWonders.all_names(seven_wonders)
+```
