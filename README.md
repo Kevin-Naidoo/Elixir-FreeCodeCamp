@@ -1,6 +1,6 @@
 # Functional Elixir
 
-![Functional Elixir](logo.jpg)
+![Functional Elixir](logo.png)
 
 A repository demonstracting knowledge and application of basic Elixir commands following the [freeCodeCamp.org](https://www.freecodecamp.org/) [Functional Programming with Elixir](https://youtu.be/IiIgm_yaoOA) youtube video by [Anil Kulkarni](https://github.com/evolutionengine).
 
