@@ -9,6 +9,10 @@ A repository demonstracting knowledge and application of basic Elixir commands f
 
 Livebook is an open-source tool for writing interactive code notebooks in Elixir. It's part of a growing collection of Elixir tools for numerical computing, data science, and Machine Learning.
 
+# Visual Studio Code
+
+Visual Studio Code is used to write the codes as well. Through the use of the ElixirLS plugin. OTP25 Erlang, Elixir 1.15.2 compatible with ElixirLS. The `iex> h` command is used for the inbuilt command help within the elixir language.  
+
 ## Topics Covered:
 
 1. Introduction to Functional Programming
@@ -25,3 +29,7 @@ Livebook is an open-source tool for writing interactive code notebooks in Elixir
 8. Mix - Stats Project
 9. Conclusion
 10. Final Words
+
+# Phoenix LiveView
+
+Phoenix Liveview is used to construct a demo website and button counter.  
