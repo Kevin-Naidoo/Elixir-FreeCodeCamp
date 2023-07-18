@@ -1,0 +1,114 @@
+# Expense project
+
+## Expenses project
+
+```elixir
+defmodule Expense do
+  defstruct(
+    title: "",
+    date: nil,
+    amount: 0,
+    store: ""
+  )
+
+  @type t :: %Expense{
+          title: String.t(),
+          date: Date.t() | nil,
+          amount: number(),
+          store: String.t()
+        }
+
+  def sample do
+    [
+      %Expense{title: "Grocery", date: ~D[2022-09-12], amount: 18.99, store: "Metro"},
+      %Expense{title: "Mobile", date: ~D[2022-10-18], amount: 55.65, store: "Bell"},
+      %Expense{title: "Jacket", date: ~D[2022-07-06], amount: 150.99, store: "Marks"},
+      %Expense{title: "Air Jordans", date: ~D[2022-10-30], amount: 799.99, store: "Nike"}
+    ]
+  end
+
+  @spec total([t]) :: number()
+  def total(expenses) do
+    expenses |> Enum.reduce(0, fn expense, acc -> expense.amount + acc end)
+  end
+
+  @spec sort_by_date([t()]) :: [t()]
+  def sort_by_date(expenses) do
+    expenses |> Enum.sort_by(& &1.date)
+  end
+
+  @spec add_expense(t) :: [t()]
+  def add_expense(%Expense{} = expenses) do
+    [expenses | sample()]
+  end
+
+  def update_amount(title, amount) do
+    [item] = Enum.filter(sample(), fn %{title: expense_title} -> expense_title == title end)
+    new_item = %{item | amount: amount}
+
+    [new_item | sample() |> List.delete(item)]
+  end
+
+  @users ["Coco", "Cece", "Louis", "Chicko"]
+
+  def authenticate(user) when user in @users, do: {:ok, "authorized"}
+  def authenticate(_), do: {:error, "unauthorised"}
+
+  def verify_password(user, _password) when user in @users, do: {:ok, "password verified"}
+  def verify_password(_user, _password), do: {:error, "wrong password"}
+
+  def login(user, password) do
+    with {:ok, _auth_msg} <- authenticate(user),
+         {:ok, _msg} <- verify_password(user, password) do
+      {:ok, "#{user} logged in successfully"}
+    else
+      {:error, msg} -> {:error, msg}
+      _ -> :unauthorised
+    end
+  end
+end
+```
+
+Ways of getting the date in ELixir:
+
+```elixir
+~D[2023-12-01]
+```
+
+```elixir
+Date.new(2023, 04, 01)
+```
+
+Struct Expense expanded:
+
+```elixir
+sample = Expense.sample()
+```
+
+`Expense.total()` uses the `Enum.reduce()` function
+
+```elixir
+calc_expense = Expense.total(sample)
+```
+
+```elixir
+sort_date = Expense.sort_by_date(sample)
+```
+
+```elixir
+new_expense =
+  Expense.add_expense(%Expense{
+    title: "Coffee",
+    date: ~D[2022-09-25],
+    amount: 49.90,
+    store: "Mugg&Bean"
+  })
+```
+
+```elixir
+Expense.update_amount("Grocery", 50.9)
+```
+
+```elixir
+Expense.login("Louis", 1234)
+```
