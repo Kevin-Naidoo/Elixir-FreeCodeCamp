@@ -13,6 +13,10 @@ defmodule Cards do
   end
 
   def contains?(deck, card) do
-    deck |> Enum.member?(card)
+    deck |> Enum.member?(card) #locating card in deck
+  end
+
+  def deal(deck, hand_size) do
+    Enum.split(deck, hand_size) #Dealing cards {[hand], [rest of deck]}
   end
 end
