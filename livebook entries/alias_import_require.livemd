@@ -1,0 +1,77 @@
+# Import, Alias and Require
+
+## Import
+
+`Import` is a way of using the macros or functions from one module in another. `Import` with a single parameter brings in the entrie module with all it's functions.
+
+<!-- livebook:{"break_markdown":true} -->
+
+`Tutorials.Geetings` is `imported` into the `GreetWithDate` module.
+
+```elixir
+defmodule Tutorials.Greetings do
+  def greet(name) do
+    "Hello #{name}"
+  end
+end
+
+defmodule Tutorials.Long.Function.Name.Print do
+  def alias_in_action do
+    "Using alias shortens call"
+  end
+end
+
+defmodule PrintTwice do
+  def print(arg) do
+    IO.puts("#{arg}")
+    IO.puts("#{arg}")
+  end
+end
+
+defmodule GreetWithDate do
+  # brings function greet(name)
+  import Tutorials.Greetings
+  # shortens module function call in module
+  alias Tutorials.Long.Function.Name.Print
+  require PrintTwice
+
+  def greet_with_date(name) do
+    {{year, month, day}, {_hour, _minute, _second}} = :calendar.local_time()
+    Enum.join([greet(name), "on the", year, month, day], " ")
+  end
+
+  def demonstrate_alias do
+    Print.alias_in_action()
+  end
+
+  def demonstrate_require(arg) do
+    PrintTwice.print(arg)
+  end
+end
+```
+
+Now we can use the imported function `greet(name)` from `Tutorials.Greet` inside the module `GreetWithDate`
+
+```elixir
+GreetWithDate.greet_with_date("Kevin")
+```
+
+## Alias
+
+We can also use an alias for a function to shorten a module name and call in another module:
+
+```elixir
+GreetWithDate.demonstrate_alias()
+```
+
+## Require
+
+Just loads the required module so that the module and function is called
+
+```elixir
+GreetWithDate.demonstrate_require("Hello")
+```
+
+We can see that import does the job of both **Loading** the module as well as **Ignoring** long module names.<br>
+Thus: `Import = require + alias`<br>
+It can however clash with functions within the imported module of the same name.
