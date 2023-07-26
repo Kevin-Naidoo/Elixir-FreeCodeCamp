@@ -12,15 +12,9 @@ module.exports = {
     "../lib/*_web/**/*.*ex"
   ],
   theme: {
-    screens: {
-        sm: '480px',
-        md: '768px',
-        lg: '976px',
-        xl: '1440px',
-    },
     extend: {
       colors: {
-        flame_red: "#a10705" 
+        brand: "#FD4F00",
       }
     },
   },

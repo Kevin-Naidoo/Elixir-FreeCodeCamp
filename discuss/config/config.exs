@@ -18,7 +18,7 @@ config :discuss, DiscussWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Discuss.PubSub,
-  live_view: [signing_salt: "9Eyb31aK"]
+  live_view: [signing_salt: "jXq4eYJf"]
 
 # Configures the mailer
 #

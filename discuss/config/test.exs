@@ -17,7 +17,7 @@ config :discuss, Discuss.Repo,
 # you can enable the server option below.
 config :discuss, DiscussWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "ShOZx+4+ZCt8G+jrHf9j++Yx04dA0HgQ8OH4Do0/7TDRZ5bVdHKLajznHbe4mRdR",
+  secret_key_base: "3Qy3edlTBLaQYZ05mzIhw9fK0+bmLK/br9hxO1p6KVqfIprOvPUcLAbBNLvQomJ9",
   server: false
 
 # In test we don't send emails.

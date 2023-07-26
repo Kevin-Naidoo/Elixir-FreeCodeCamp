@@ -7,7 +7,7 @@ defmodule DiscussWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_discuss_key",
-    signing_salt: "Dp0NKZgJ",
+    signing_salt: "R9buLlNH",
     same_site: "Lax"
   ]
 
