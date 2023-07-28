@@ -10,12 +10,13 @@ An **atom** is a variable whose value is its name.<br> For Example: <br> :Kevin 
 
 ```elixir
 :error
-r``
 
 **Atoms used within a tuple:**
 
-```elixir
+```
+
 {:error, reason} = {:error, "Error 404"}
+
 ```
 
 In line 1 above there is one key aspect of Elixir being used:<br>
@@ -26,104 +27,134 @@ In line 1 above there is one key aspect of Elixir being used:<br>
 * We can see another example below. <br>
 * These types of tuples are often used in system state messages
 
-```elixir
+```
+
 {:ok, msg} = {:ok, "Status 200 ok"}
+
 ```
 
 ## Strings
 
 Basic String Operator:
 
-```elixir
+```
+
 name = "Kevin"
 name
+
 ```
 
 The *is_binary* command is a boolean. It returns true if a string is the data type, which in this case is true. A binary is a bit-string whose number of bits is divisible by 8. https://blog.hubspot.com/website/what-is-utf-8 | https://www.educative.io/answers/what-is-isbinary-in-elixir
 
-```elixir
+```
+
 is_binary(name)
+
 ```
 
 String concatination can be done using *<>*
 
-```elixir
+```
+
 msg = "Hello " <> name
+
 ```
 
 Through the matching operator, the concatinated string is bound to the string msg.
 
-```elixir
+```
+
 "Hello " <> name = msg
 name
+
 ```
 
 The **<<>>**, a bitstring operator can be utilised to access the numerical ASCII value of the first character in name. In this case K corresponds to a value of 75
 
-```elixir
+```
+
 <<head, rest::binary>> = name
 head
+
 ```
 
 We can confirm this is correct by using the **?** operator. <br>
 The **==** operator is used to perform logic comparisons.
 
-```elixir
+```
+
 head == ?K
+
 ```
 
 The '**keyword::binary**' is an inbuilt string operator capable of binding the remainder of the string. In this case the string **rest** is being bound to the rest of the string. i.e. "evin"
 
-```elixir
+```
+
 <<"K", rest::binary>> = name
 rest
+
 ```
 
 The head variable can be bound to more than just one character, in this case a string containing two characters is being bound to head and the variable rest contains the last 3 characters of the name.
 
-```elixir
+```
+
 <<"Ke", rest::binary>> = name
 rest
+
 ```
 
 The number of characters in the string can be specified through the use of **binary-size(x)** where **x** signifies the number of characters desired.
 
-```elixir
+```
+
 <<head::binary-size(2), rest::binary>> = name
 head
+
 ```
 
 ## Charlist
 
 A character list is not to be confused with a string. A charlist does not have the same functionality as a string due to the memory allocation during its construction. A charlist can be created using single quotation marks. e.g **'Kevin'**
 
-```elixir
+```
+
 chars = 'Kevin'
+
 ```
 
 Concatination of character lists can be done using the **++** operator.
 
-```elixir
+```
+
 'Hello ' ++ chars
+
 ```
 
 Similarly to is_binary above, **is_list** returns true if the variable is a charlist.
 
-```elixir
-is_list(chars)
 ```
 
-```elixir
+is_list(chars)
+
+```
+
+```
+
 ?a
+
 ```
 
 ## Process
 
 An important and vastly used resource in Elixir is the **PID(Process Identification)**. variables/processes in Elixir are isolated in order to keep them fault tolarant. As a means of communication, message passing is used. The **PID** forms the linkage correctly.
 
-```elixir
+```
+
 my_pid = self()
 my_pid
+
 ```
 
 ## Lists - Singly linked lists
@@ -134,8 +165,10 @@ Elixir only uses Singly Linked Lists, this is done as a performance management d
 
 Lists are created using the **[]** brackets, with each element separated commas '*,*'. https://medium.com/@sushantbajracharya/elixirs-singly-linked-list-efe0fea4d35
 
-```elixir
+```
+
 list = ["a", "b", "c"]
+
 ```
 
 Finds the element at the given index (zero-based).
@@ -144,250 +177,327 @@ Returns default if index is out of bounds.
 
 A negative index can be passed, which means the enumerable is enumerated once and the index is counted from the end (for example, -1 finds the last element).
 
-```elixir
+```
+
 Enum.at(list, 2)
+
 ```
 
-```elixir
+```
+
 [first, second, third] = list
+
 ```
 
-```elixir
+```
+
 second
+
 ```
 
 A **'_'** can be used to fill unrequired elements in a list.
 
-```elixir
-[_, _, third] = ["a", "b", "c"]
 ```
 
-```elixir
+[_, _, third] = ["a", "b", "c"]
+
+```
+
+```
+
 third
+
 ```
 
 **'hd'** points to the head of the list.
 
-```elixir
+```
+
 hd(list)
+
 ```
 
 **'tl'** - Tail ( Returns the rest of the list)
 
-```elixir
+```
+
 tl(list)
+
 ```
 
 **[|]** concatinates lists
 
-```elixir
+```
+
 [h | t] = list
+
 ```
 
-```elixir
+```
+
 h
+
 ```
 
-```elixir
+```
+
 t
+
 ```
 
 ## Tuple
 
 Tuples store elements contiguously in memory. This means accessing a tuple element by index or getting the tuple size is a fast operation. Indexes start from zero:
 
-```elixir
+```
+
 {a, b} = {1, 2}
 tuple_check = {a, b}
 elem(tuple_check, 0)
+
 ```
 
 A common tuple used in servers. The state is passed as a list.
 
-```elixir
+```
+
 {:reply, msg, state} = {:reply, "Kevin found!", ["Octalium", "Louis", "Chiko"]}
 state
+
 ```
 
 ## Keyword List
 
 A key word list is shown below. The first element is always saved as an atom and the keyword pair is saved as a tuple.
 
-```elixir
-data = [a: 1, b: 2]
 ```
 
-```elixir
+data = [a: 1, b: 2]
+
+```
+
+```
+
 [{:a, 1}] = [a: 1]
+
 ```
 
 Accessing an element in the keyword list:
 
-```elixir
+```
+
 data[:a]
+
 ```
 
 ## Maps
 
 For maps we use **%{}**, they provide more functionality than tuples and lists. They allow several data types within it.
 
-```elixir
+```
+
 my_map = %{a: 2, b: 2, c: 3}
 my_map
+
 ```
 
 We can use pattern mapping to see the output:
 
-```elixir
+```
+
 %{a: first, b: second, c: third} = my_map
+
 ```
 
 Extracting a single value within the map, we dont need to call the entire map.
 
-```elixir
+```
+
 %{b: second} = my_map
+
 ```
 
 since we are using atoms as keys, we can use the **.** operator to get the value.
 
-```elixir
+```
+
 my_map.a
+
 ```
 
 Using strings as keys, we have to use **=>** notataion
 
-```elixir
+```
+
 map2 = %{"a" => 1, "b" => 2, "c" => 3}
+
 ```
 
 Extracting a single value from the map:
 
-```elixir
+```
+
 %{"c" => c} = map2
 c
+
 ```
 
 Updating a map, using the **|** operator. This finds the key and binds the value back to the original map.
 
-```elixir
+```
+
 map2 = %{map2 | "c" => 4}
+
 ```
 
 ## Struct
 
 Structs stands for structure, we define a module for this. The struct takes the name of the module. The **defstruct** line is used to define the fields within the struct.
 
-```elixir
+```
+
 defmodule User do
   defstruct username: "", email: "", age: nil
 end
+
 ```
 
 From the created struct, we can initialise a struct, and similarly to a map, we use the **%** and the struct name to define a new struct.
 
-```elixir
+```
+
 user1 = %User{username: "Kevin", email: "kevinnelsonnaidoo@gmail.com", age: 26}
+
 ```
 
 Extracting the username from the struct:
 
-```elixir
+```
+
 %{username: username} = user1
 username
+
 ```
 
 Updating a field within a struct:
 
-```elixir
+```
+
 user1 = %{user1 | age: 32}
 user1
+
 ```
 
 ## Case
 
 Flow control mechanisms:
 
-```elixir
+```
+
 list = [1, 2, 3]
+
 ```
 
 A case statement works in a similar fashion to a **switch** statement. The underscore **_** operator can be used as a default case.
 
-```elixir
+```
+
 case Enum.at(list, 2) do
   1 -> "This wont print"
   3 -> "3 is a match?"
   _ -> "Catch all"
 end
+
 ```
 
 Example of a case acting upon a struct:
 
-```elixir
+```
+
 defmodule Post do
   defstruct(
-    id: nil,
-    title: "",
-    description: "",
-    author: ""
-  )
+
+```
+id: nil,
+title: "",
+description: "",
+author: ""
+```
+
+)
 end
+
 ```
 
-```elixir
+```
+
 post1 = %Post{id: 1, title: "Title No 1", author: "Julius Caesar"}
+
 ```
 
-```elixir
+```
+
 case post1 do
   %{author: "Kevin"} -> "Got a post from Kevin"
   %{author: "Veloashan Naidoo"} -> "Got a post from Velo"
   _ -> "Got a post from #{post1.author}"
 end
+
 ```
 
 Updating author name:
 
-```elixir
-post1 = %{post1 | author: "Kevin"}
 ```
 
-```elixir
+post1 = %{post1 | author: "Kevin"}
+
+```
+
+```
+
 case post1 do
   %{author: "Kevin"} -> "Got a post from Kevin"
   %{author: "Veloashan Naidoo"} -> "Got a post from Velo"
   _ -> "Got a post from #{post1.author}"
 end
+
 ```
 
 ## Condition
 
 The **true** operator is used as a default condition
 
-```elixir
+```
+
 cond do
   post1.author == "Kevin" -> "Editing a post from Kevin"
   post1.author == "Anil Kulkarni" -> "Editing a post from Anil Kulkarni"
   true -> "This is a catch all"
 end
+
 ```
 
-```elixir
+```
+
 cond do
   hd(list) == 1 -> "Got a 1"
   true -> "Head is #{hd(list)}"
 end
+
 ```
 
 ## If/Else
 
-```elixir
+```
+
 if true do
   "This will work"
 else
   "Else this will work"
 end
+
 ```
 ## End of File
 
 EOF
+```

@@ -1,0 +1,112 @@
+# Test prep
+
+## Strings
+
+* Double Quotes are important
+* This is different from character lists
+* UDF-8 encoded binary
+* The << shows the individual integer representations of characters inside the string>>
+
+<!-- livebook:{"break_markdown":true} -->
+
+Lets try pattern match from string:
+
+```elixir
+"O" <> rest = "Octhallium"
+rest
+```
+
+Individual character values...We can use '?' eg. `?a` which returns `97`
+
+```elixir
+?a
+```
+
+Using `is_binary` to detect if theres a string.
+
+```elixir
+name = "Kevin"
+is_binary(name)
+```
+
+Adding two strings together: Make sure to use `<>`
+
+```elixir
+msg = "Hello " <> name
+```
+
+Lets pattern match using string concatination using `<>`
+
+```elixir
+"Hello " <> name = msg
+msg
+```
+
+Pattern matching on the raw representation of the string:
+
+```elixir
+<<head, rest::binary>> = name
+head
+```
+
+```elixir
+<<"Ke", rest::binary>> = name
+rest
+```
+
+```elixir
+<<head::binary-size(5), rest::binary>> = msg
+rest
+```
+
+Charlist: [75,23,98,...]
+
+```elixir
+chars = 'Kevin'
+```
+
+Use a ++ instead of <>
+
+```elixir
+'Hello ' ++ chars
+```
+
+Use `is_list()` to check if it is a character
+
+```elixir
+is_list(chars)
+```
+
+PID
+
+```elixir
+my_pid = self()
+```
+
+## Lists
+
+Lists - singly linked lists
+
+```elixir
+list = ["a", "b", "c"]
+```
+
+```elixir
+Enum.at(list, 0)
+```
+
+Sum function using recursion
+
+```elixir
+defmodule Total do
+  def sum(num, acc \\ 0)
+
+  def sum([], acc) do
+    acc
+  end
+
+  def sum([h | t], acc) do
+    sum(t, acc + h)
+  end
+end
+```

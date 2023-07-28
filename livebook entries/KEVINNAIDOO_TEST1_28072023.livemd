@@ -1,0 +1,428 @@
+# KEVINNAIDOO_TEST1_28072023
+
+## Test 1 - Elixir basics 28/07/2023
+
+Total Marks 102
+
+## Instructions
+
+1. **Read Carefully**: Each question in this test is designed to evaluate your understanding of Elixir. Read the questions thoroughly and understand what is being asked before you start coding.
+
+2. All the questions in this test can be completed within Livebook.
+
+3. **Time Management**: Manage your time efficiently. It's better to have a fully completed and functional answer for fewer questions than to have partially completed answers for all the questions.
+
+4. **Documentation**: Properly document your code where necessary. Use comments if necessary
+
+Please save your completed test in this format : YOURNAME_TEST1_28072023.md
+
+Please upload this file to this folder:
+
+https://drive.google.com/drive/folders/1yENwtYVYaQwet362HAx_PXPY06rNcw94?usp=drive_link
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Section 0: Name         (2)
+
+1. Please enter the raw representation of your name:
+
+<!-- livebook:{"break_markdown":true} -->
+
+Name: Kevin
+
+```elixir
+raw_rep = <<75, 101, 118, 105, 110>>
+```
+
+1.b. Convert this raw representation back to your name in a human-readable format?
+
+Hint: You can use the to_string/1 function
+
+```elixir
+raw_rep
+```
+
+### Section 1: Pattern Matching (5)
+
+Write a function that takes an integer as an argument. If the integer is positive, the function should return a tuple with :ok and the passed integer. If the integer is negative, it should return a tuple with :error and a string "negative number". Test your function with the numbers 5 and -5.<br>.
+
+```
+func(10)
+{:ok, 10}
+func(-1)
+{:error, "negative number"}
+```
+
+** Answer code below **
+
+```elixir
+defmodule Negative do
+  def is_negative(num) do
+    case num >= 0 do
+      true -> {:ok, num}
+      false -> {:error, "negative number"}
+    end
+  end
+end
+```
+
+```elixir
+Negative.is_negative(5)
+```
+
+```elixir
+Negative.is_negative(-5)
+```
+
+### Section 2: Recursion   (20)
+
+You're given a list of numbers `[3, 7, 25, 12, 6, 8]`. Write a function that uses recursion and the head/tail functionality in Elixir to find the sum of this list. Hint: See the diagram for more context (10)
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+  participant sum_list as sum_list([3,7,25,12,6,8])
+  participant sum_list1 as sum_list([7,25,12,6,8])
+  participant sum_list2 as sum_list([25,12,6,8])
+  participant sum_list3 as sum_list([12,6,8])
+  participant sum_list4 as sum_list([6,8])
+  participant sum_list5 as sum_list([8])
+  participant sum_list6 as sum_list([])
+  sum_list->>sum_list1: 3 + sum_list([7,25,12,6,8])
+  sum_list1->>sum_list2: 7 + sum_list([25,12,6,8])
+  sum_list2->>sum_list3: 25 + sum_list([12,6,8])
+  sum_list3->>sum_list4: 12 + sum_list([6,8])
+  sum_list4->>sum_list5: 6 + sum_list([8])
+  sum_list5->>sum_list6: 8 + sum_list([])
+  sum_list6->>sum_list5: Return 0
+  sum_list5->>sum_list4: Return 8
+  sum_list4->>sum_list3: Return 14
+  sum_list3->>sum_list2: Return 26
+  sum_list2->>sum_list1: Return 51
+  sum_list1->>sum_list: Return 61
+```
+
+**Answer** Code - Head recursion
+
+```elixir
+defmodule Head_Sum do
+  def sum([]) do
+    0
+  end
+
+  def sum([h | t]) do
+    h + sum(t)
+  end
+end
+```
+
+```elixir
+Head_Sum.sum([3, 7, 25, 12, 6, 8])
+```
+
+### Now perform the same, using tail recursion. (10)
+
+**Answer**  code - Tail recursion
+
+```elixir
+defmodule Tail_Sum do
+  def sum(num, acc \\ 0)
+
+  def sum([], acc) do
+    acc
+  end
+
+  def sum([h | t], acc) do
+    sum(t, acc + h)
+  end
+end
+```
+
+```elixir
+Tail_Sum.sum([3, 7, 25, 12, 6, 8])
+```
+
+## Section 3: Maps (7)
+
+Can a map in Elixir have keys of different types? Yes or No. Provide an example.      (2)
+
+```elixir
+# No. Maps do not impose any restriction on the key type.
+variety = %{:"long atom" => 3, "Kevin" => 1997, 102 => "Test"}
+```
+
+Given the following map representing a person's information:
+
+```elixir
+person = %{name: "Alice", age: 25, country: "South Africa"}
+```
+
+Write a function get_info that accepts a map and a key (as an atom). This function should return the value corresponding to the key in the map if the key exists. If the key does not exist in the map, it should return a string "Key not found"                           (5)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Using our get_info/2 function to get some info about the person:
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+ MapInfo.get_info(person, :name)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+The expected output would be
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+"Alice"
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+For a key that doesn't exist in our map, the output would be:
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+MapInfo.get_info(person, :job)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+The expected output would be
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+"Key not found"
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Please enter your code here:
+
+```elixir
+defmodule MapInfo do
+  def get_info(map, key) do
+  end
+end
+```
+
+```elixir
+
+```
+
+### Section 4: Flow Control   (23)
+
+Elixir, being a functional language, doesn't have the traditional loop constructs like 'for' or 'while' loops you would find in imperative languages. Instead, it provides recursive functions and higher-order functions such as 'map', 'reduce', 'filter', etc. However, it does provide a special form of a 'for' loop known as a "comprehension", which is a syntactic sugar for iterating over enumerables.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Explain how a recursive function can be used to implement a loop in Elixir. What are some factors to consider when using recursive functions for looping?      (3)
+
+<!-- livebook:{"break_markdown":true} -->
+
+**Answer**:<br> A function is called recursively until a condition is reached that stops the recursive action from continuing. No data is mutated in this process.<br> Things to consider:
+
+* Since data is immutable, the previous data should be passed throuhg an **accumulator**
+* **Head Recursion** incurs stack usage and thus stack can crash when memory full
+* **Tail Recursion** incurs no stack and is favourable since it execute immediately.
+
+```elixir
+
+```
+
+Define a function print_pattern/1 in Elixir that accepts an integer n and prints a pattern of asterisks descending from n to 1. Each line should contain the same number of asterisks as its line number. For example, calling print_pattern(5) should result in the following output:
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+*****
+****
+***
+**
+*
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Please enter your code below:               (10)
+Hint: String.duplicate is a useful function.
+
+```elixir
+defmodule Stars_descend do
+  def print(1) do
+    IO.puts("*")
+  end
+
+  def print(num) do
+    row = String.duplicate("*", num)
+    IO.puts(row)
+    print(num - 1)
+  end
+end
+```
+
+```elixir
+Stars_descend.print(5)
+```
+
+Bonus Points: Rewrite the function to work in ascending order     (10)
+
+<!-- livebook:{"break_markdown":true} -->
+
+```code
+*
+**
+***
+****
+******
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Enter your code here:
+
+```elixir
+defmodule Stars_ascend do
+  def print(1) do
+    IO.puts("*")
+  end
+
+  def print(num) do
+    row = String.duplicate("*", num)
+    print(num - 1)
+    IO.puts(row)
+  end
+end
+```
+
+```elixir
+Stars_ascend.print(5)
+```
+
+### Section 5 : Debugging
+
+#### Old function need to be refactored out  (5)
+
+This code below has a warning. Please upgrade to the correct function and ensure only a list of only 8 numbers are returned. The odd number can be discarded. the expected output is <br>
+
+```[[1, 2], [3, 4], [5, 6]]```
+
+```elixir
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+Enum.chunk_every(x, 2, 2, :discard)
+```
+
+### Section: 6 - Loggers are my friend (15)
+
+#### Question (5)
+
+In building systems, loggers are very important to tell developers and support teams what is going on in your system. </br>
+They are generally written to log files. </br>
+However in this question we will use the console output. </br>
+
+This code has a bug, please fix
+
+**Hint**
+read the [hex documnet](https://hexdocs.pm/logger/1.15.4/Logger.html)
+
+```elixir
+import Logger
+Logger.info("My app is alive !")
+Logger.info(["hello ", "world!"])
+Logger.debug("debug")
+Logger.warn("there are problems")
+error("there is a error")
+```
+
+#### Question (10)
+
+Please adjust the log level to warm
+
+Only log level from warnnig and above will be displayed. The typical sample output is below.<br>
+Also please fix the error on line 8. Uncomment the code to see the problem
+
+```
+11:21:48.216 [warn] there are problems
+11:21:48.217 [error] there is a error line 8. 
+```
+
+**Hint** No log statements should be deleted. Configure the log level to adjust output from runtime. A config log file is not needed
+
+```elixir
+# Logger.configure()
+Logger.info("My app is alive !")
+Logger.info(["hello ", "world!"])
+Logger.debug("debug")
+Logger.warn("there are problems")
+error("there is a error")
+
+a = [a: 1, b: 2]
+# Logger.info( "this is my special keyword list #{(a)}")
+```
+
+### Section 7: Maps are powerful (25)
+
+#### Question x (15)
+
+We have a nested map ```class1``` <br>
+Please can you write a module to calculate the class average for "maths" <br>
+
+***Hint***
+You can use an recursive function [head|tail] to process the list and match on the map to extract the "maths" marks
+
+```elixir
+class1 = [
+  %{"english" => 80, "maths" => 95},
+  %{"english" => 60, "maths" => 70},
+  %{"english" => 88, "maths" => 75},
+  %{"english" => 88, "maths" => 75},
+  %{"english" => 60, "maths" => 99}
+]
+```
+
+```elixir
+defmodule MathAvg do
+  def total(expenses) do
+    expenses
+    |> Enum.reduce(0, fn expense, acc -> expense["maths"] + acc end)
+  end
+end
+```
+
+```elixir
+MathAvg.total(class1) / 5
+```
+
+#### Question (10)
+
+Please now work the average for "english". Note the Map ```class2```is now nested.
+
+***Hint*** use the Map module and a function to extract the values from the map
+
+```elixir
+class2 = %{
+  "Jerry" => %{"maths" => 70, "english" => 60},
+  "Sipho" => %{"english" => 60, "maths" => 100},
+  "Godfrey" => %{"english" => 80, "maths" => 95},
+  "Shawn" => %{"english" => 88, "maths" => 75},
+  "Kgotso" => %{"english" => 88, "maths" => 75}
+}
+```
+
+```elixir
+defmodule EnglishAvg do
+  def total(expenses) do
+    expenses
+    |> Enum.reduce(0, fn expense, acc -> expense["english"] + acc end)
+  end
+end
+```
+
+```elixir
+# EnglishAvg.total(class2)
+```
