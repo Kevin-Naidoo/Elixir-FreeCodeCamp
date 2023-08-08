@@ -1,0 +1,148 @@
+# Concurrency
+
+## Section
+
+```elixir
+defmodule Example do
+  def add(a, b) do
+    IO.puts(a + b)
+  end
+end
+```
+
+```elixir
+Example.add(3, 2)
+```
+
+```elixir
+spawn(Example, :add, [2, 3])
+```
+
+`spawn(SomeModule, :function, [1, 2, 3])` and returns `#PID<>`
+
+## Message Passing
+
+```elixir
+defmodule Example2 do
+  def listen do
+    receive do
+      {:ok, "hello"} -> IO.puts("World")
+    end
+
+    listen()
+  end
+end
+```
+
+`send(dest, message)` and returns `message`
+
+```elixir
+pid = spawn(Example2, :listen, [])
+```
+
+```elixir
+send(pid, {:ok, "hello"})
+```
+
+```elixir
+send(pid, :ok)
+```
+
+## Process Linking
+
+```elixir
+defmodule Example3 do
+  def explode, do: exit(:kaboom)
+end
+```
+
+```elixir
+spawn(Example3, :explode, [])
+```
+
+```elixir
+# spawn_link(Example3, :explode, [])
+```
+
+```elixir
+defmodule Example4 do
+  def explode, do: exit(:kaboom)
+
+  def run do
+    Process.flag(:trap_exit, true)
+    spawn_link(Example4, :explode, [])
+
+    receive do
+      {:EXIT, _from_pid, reason} -> IO.puts("Exit reason: #{reason}")
+    end
+  end
+end
+```
+
+```elixir
+Example4.run()
+```
+
+## Process Monitoring
+
+```elixir
+defmodule Example5 do
+  def explode, do: exit(:kaboom)
+
+  def run do
+    spawn_monitor(Example5, :explode, [])
+
+    receive do
+      {:DOWN, _ref, :process, _from_pid, reason} -> IO.puts("Exit reason: #{reason}")
+    end
+  end
+end
+```
+
+```elixir
+Example5.run()
+```
+
+## Agents
+
+```elixir
+{:ok, agent} = Agent.start_link(fn -> [1, 2, 3] end)
+```
+
+```elixir
+Agent.update(agent, fn state -> state ++ [4, 5] end)
+```
+
+```elixir
+Agent.get(agent, & &1)
+```
+
+```elixir
+Agent.start_link(fn -> [1, 2, 3] end, name: Numbers)
+```
+
+```elixir
+Agent.get(Numbers, & &1)
+```
+
+## Tasks
+
+```elixir
+defmodule Example6 do
+  def double(x) do
+    :timer.sleep(2000)
+    x * 2
+  end
+end
+```
+
+```elixir
+# task = Task.async(Example6, :double, [2000])
+# %Task{
+# owner:, #PID<0.105.0>,
+# pid:, #PID<0.114.0>,
+# ref:, #Reference<0.2418076177.4129030147.64217>
+# }
+
+# Do some work
+```
