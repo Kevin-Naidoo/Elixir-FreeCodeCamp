@@ -1,5 +1,118 @@
 # TauSpace Concurrency - Avinash set examples
 
+## 1. Modules and Functions
+
+**Modules** - Think of modules like folders that group related functions. Functions - Individual operations that can be performed.
+
+## 2. Concurrency in Elixir
+
+**Introduction to the Actor Model**<br>
+Elixir uses the Actor Model for concurrency. Each actor (process) is an independent unit that maintains its state and communicates with other actors via messages.
+
+<!-- livebook:{"break_markdown":true} -->
+
+**Processes**
+
+```elixir
+pid = spawn(fn -> IO.puts("hi padawan") end)
+```
+
+Assigns PID to handle the inline function call.
+
+```elixir
+Process.alive?(pid)
+```
+
+The Erlang Runtime Garbage Collecter collects whatever is associated to that PID.
+
+```elixir
+pid = spawn(fn -> Process.sleep(10000) && IO.puts("hi padawan") end)
+```
+
+```elixir
+Process.alive?(pid)
+```
+
+Spawn is a way to run something asynchronously.
+
+```elixir
+defmodule SimpleProcess do
+  def print_message do
+    IO.puts("Hello from a spawned process!")
+  end
+end
+
+pid = spawn(SimpleProcess, :print_message, [])
+```
+
+Ok async functions don't always have a sleep,
+
+They can also "wait for a message from the outside", using the receive statement.
+
+```elixir
+defmodule Foo do
+  def receiver() do
+    receive do
+      v ->
+        IO.inspect(v)
+        receiver()
+    end
+  end
+end
+```
+
+```elixir
+pid = spawn(Foo, :receiver, [])
+```
+
+```elixir
+send(pid, "Hey you")
+```
+
+This means : run the function on the Foo module , the function name as an atom ( has to be an atom ) and if the func has parameters we put it in the third parameter of spawn as list. In this case the func has two parameters then is [].
+
+```elixir
+defmodule Foo2 do
+  def receiver() do
+    receive do
+      v ->
+        IO.inspect(v)
+        receiver()
+    end
+  end
+end
+```
+
+```elixir
+pid = spawn(Foo2, :receiver, [])
+```
+
+```elixir
+send(pid, :foo)
+```
+
+```elixir
+send(pid, :bar)
+```
+
+```elixir
+send(pid, :baz)
+```
+
+```elixir
+Process.alive?(pid)
+```
+
+```elixir
+Process.delete(pid)
+```
+
+```elixir
+Process.alive?(pid)
+```
+
+Its still alive after delete, because Process.delete only sends stop signal or message to the process and the func or module does not have a receive clause to handle a stop signal.
+
 ## Section 3 - Greeter Example
 
 In Elixir, processes don't share state. They communicate by sending and receiving messages, ensuring data consistency. Sending and receiving messages between processes Introduction to recursive processes for continuous message listening
