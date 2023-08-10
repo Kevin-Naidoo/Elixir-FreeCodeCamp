@@ -1,0 +1,117 @@
+# Samuel Mullen Tutorial
+
+## Processes
+
+```elixir
+spawn(fn -> IO.puts("Hello, World!") end)
+|> Process.info(:memory)
+```
+
+```elixir
+spawn(fn -> IO.puts("Hello, Alpha Centauri!") end)
+```
+
+```elixir
+spawn(IO, :puts, ["Hello, Alpha Centauri!"])
+```
+
+```elixir
+send(self(), :hi)
+```
+
+```elixir
+Process.info(self(), :messages)
+```
+
+```elixir
+receive do
+  :hi -> IO.puts("Hello.")
+end
+```
+
+```elixir
+Process.info(self(), :messages)
+```
+
+```elixir
+receive do
+  :hi ->
+    IO.puts("Hello!")
+after
+  0 ->
+    IO.puts("Message not found")
+end
+```
+
+```elixir
+defmodule Salutator do
+  def run do
+    receive do
+      {:hi, name} ->
+        IO.puts("Hi, #{name}")
+
+      {_, name} ->
+        IO.puts("Hello, #{name}")
+    end
+  end
+end
+```
+
+```elixir
+pid = spawn(Salutator, :run, [])
+```
+
+```elixir
+send(pid, {:hi, "Mark"})
+```
+
+```elixir
+send(pid, {:hello, "Suzie"})
+```
+
+```elixir
+defmodule Salutator2 do
+  def run do
+    receive do
+      {:hi, name} ->
+        IO.puts("Hi, #{name}")
+
+      {_, name} ->
+        IO.puts("Hello, #{name}")
+    end
+
+    # <- Recursion FTW!
+    run()
+  end
+end
+```
+
+```elixir
+pid = spawn(Salutator2, :run, [])
+```
+
+```elixir
+send(pid, {:hi, "Mark"})
+```
+
+```elixir
+send(pid, {:hello, "Suzie"})
+```
+
+## The Process Mailbox
+
+We saw previously that messages are stored in a process's mailbox until it's able to `receive` them. But why send messages to a process's mailbox instead of calling the function directly? According to the Elixir guide on processes, “The process that sends the message does not block on `send/2`, it puts the message in the recipient's mailbox and continues.” The receiving process is then able to process messages from its mailbox according to its capacity, without needing to communicate its progress to the originating process, and without hindering the caller's progress.
+
+The receive expression works as follows
+
+* Take the first message from the mailbox.<br>
+* Try to match it against any of the provided patterns, going from top to bottom.<br>
+* If a pattern matches the message, run the corresponding code.<br>
+* If no pattern matches, put the message back into the mailbox at the same position it originally occupied. Then try the next message.<br>
+* If there are no more messages in the queue, wait for a new one to arrive.<br>
+* When a new message arrives, start from step 1, inspecting the first message in the mailbox.<br>
+* If the after clause is specified and no message is matched in the given amount of time, run the code from the after block.
+
+```elixir
+self()
+```
