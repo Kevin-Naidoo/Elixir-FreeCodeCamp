@@ -1,6 +1,6 @@
 # TauSpace Concurrency - Avinash set examples
 
-## Greeter Example
+## Section 3 - Greeter Example
 
 In Elixir, processes don't share state. They communicate by sending and receiving messages, ensuring data consistency. Sending and receiving messages between processes Introduction to recursive processes for continuous message listening
 
@@ -58,4 +58,59 @@ send(pid, {:greet_morning, "Kevin"})
 
 ```elixir
 send(pid2, {:greet_evening, "Fundi"})
+```
+
+## Section 4 - Linked process example
+
+```elixir
+defmodule LinkedProcess do
+  def start_link do
+    spawn_link(fn -> loop() end)
+  end
+
+  def send_msg(msg) do
+    msg
+  end
+
+  def loop do
+    receive do
+      :exit ->
+        exit(:normal)
+
+      msg ->
+        IO.puts("Received: #{msg}")
+        loop()
+    end
+  end
+end
+```
+
+**Exercise Question : Linked Process**<br>
+Consider the above example of a linked process. Modify the `LinkedProcess` module to include a function that sends messages to the loop. Then, write code to spawn the linked process, send it several messages, and finally kill it.
+
+Hint: You can use the `send/2` function to send messages to a process by its **PID**.<br>
+Goal: Practice working with **linked processes**, **message passing**, and **process termination**.
+
+```elixir
+pid = LinkedProcess.start_link()
+```
+
+```elixir
+send(pid, "Hello World")
+send(pid, "Hello Kevin")
+send(pid, "Hello TauSpace")
+send(pid, :exit)
+```
+
+Aftr sending the normal exit, the pid has terminated the process. There is no longer a receiver running.
+
+```elixir
+send(pid, "Hello Monte")
+```
+
+Now the Process exit returns true because the pid completed the :exit normal process. How to handle errors and gracefully shut down a process. Error handling and process termination.
+
+```elixir
+# Will kill the linked process
+Process.exit(pid, :kill)
 ```
