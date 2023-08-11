@@ -274,9 +274,17 @@ defmodule MyWorker do
     GenServer.call(__MODULE__, :increment)
   end
 
+  def get_state do
+    GenServer.call(__MODULE__, :get_state)
+  end
+
   # Server Side Functions
   def handle_call(:increment, _from, state) do
     {:reply, :ok, state + 1}
+  end
+
+  def handle_call(:get_state, _, state) do
+    {:reply, state, state}
   end
 end
 
@@ -292,7 +300,7 @@ defmodule MySupervisor do
       {MyWorker, []}
     ]
 
-    Supervisor.init(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one, name: MySupervisor)
   end
 end
 ```
@@ -302,7 +310,15 @@ MySupervisor.start_link()
 ```
 
 ```elixir
-MySupervisor.init(0)
+MyWorker.increment()
+```
+
+```elixir
+MyWorker.get_state()
+```
+
+```elixir
+Supervisor.which_children(MySupervisor)
 ```
 
 **Exercise Question**<br>
@@ -317,5 +333,112 @@ Implement the following functionalities:
 Use the simple supervisor example as a reference. Ensure that your solution demonstrates the usage of supervisors and their strategies for fault tolerance.
 
 ```elixir
+defmodule WorkerA do
+  use GenServer
 
+  # Client API
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, 0, name: __MODULE__)
+  end
+
+  def increment do
+    GenServer.call(__MODULE__, :increment)
+  end
+
+  def get_state do
+    GenServer.call(__MODULE__, :get_state)
+  end
+
+  # Server Side Functions
+  def handle_call(:increment, _from, state) do
+    {:reply, :ok, state + 1}
+  end
+
+  def handle_call(:get_state, _, state) do
+    {:reply, state, state}
+  end
+end
+
+defmodule WorkerB do
+  use GenServer
+
+  # Client API
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, 0, name: __MODULE__)
+  end
+
+  def increment do
+    GenServer.call(__MODULE__, :increment)
+  end
+
+  def get_state do
+    GenServer.call(__MODULE__, :get_state)
+  end
+
+  # Server Side Functions
+  def handle_call(:increment, _from, state) do
+    {:reply, :ok, state + 1}
+  end
+
+  def handle_call(:get_state, _, state) do
+    {:reply, state, state}
+  end
+end
+
+defmodule WorkerSupervisor do
+  use Supervisor
+
+  def start_link() do
+    Supervisor.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def init(_) do
+    children = [
+      {WorkerA, []},
+      {WorkerB, []}
+    ]
+
+    Supervisor.init(children, strategy: :one_for_all, name: WorkerSupervisor)
+  end
+end
+```
+
+```elixir
+WorkerSupervisor.start_link()
+```
+
+```elixir
+WorkerA.get_state()
+```
+
+```elixir
+WorkerA.increment()
+```
+
+```elixir
+WorkerB.get_state()
+```
+
+```elixir
+WorkerB.increment()
+```
+
+```elixir
+Supervisor.which_children(WorkerSupervisor)
+```
+
+```elixir
+WorkerA.get_state()
+```
+
+```elixir
+WorkerB.get_state()
 ```
