@@ -30,3 +30,23 @@ It's a set of rules and protocols that allows different software applications to
 * WebSockets: Unlike the request-response model of REST and GraphQL, WebSockets allow a continuous two-way communication between the client and server. It's useful for applications that require real-time functionality.
 
 * gRPC: Developed by Google, gRPC is a high-performance, open-source framework that uses HTTP/2 for transport and Protocol Buffers as the interface description language.
+
+## Rest API and OpenAPI
+
+What is OpenAPI?
+
+* The OpenAPI Specification:
+  * OpenAPI file -YAML/JSON - Describes what an API/service can do
+  * Standardised format - Readable
+  * REST API Description of  - Resources, Endpoints, Operations, Parameters, Authentication/Authorisation
+  * Guidance - Allows use of service
+  * Allows extension of API w/tooling
+
+<!-- livebook:{"break_markdown":true} -->
+
+REST API Specification:
+
+* Basic REST API Info
+* Description of API Request
+* Description of API Response
+* Example Response
