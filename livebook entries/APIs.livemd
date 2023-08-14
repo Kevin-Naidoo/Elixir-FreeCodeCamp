@@ -50,3 +50,73 @@ REST API Specification:
 * Description of API Request
 * Description of API Response
 * Example Response
+
+## Better API Design with OpenAPI -Marsh Gardiner
+
+OpenAPI 3.0 Released 2017<br>
+Maintained on Github<br>
+
+**Google** does not use APIs, they have things in binary format due to scalability. gRPC can be expressed as JSON and that can be translated to Open API.
+
+## The API Lifecycle with OpenAPI
+
+**Build**
+
+* Model, Develop, Document, Test<br>
+
+**Use**
+
+* Publish API, Monetize, Access Control, Data Access, Analyze, Deploy
+
+**Run**
+
+* Update/Iterate, Threat Protection, Real Time Monitoring, Maintain Availability, Scale Traffic
+
+## Specifications
+
+* Specs drive documentation
+* Specs can inform implementations - backend code
+* Specs can drive mocks - build up client examples (mock-ups)
+* Specs can also power:
+  * Test generation
+  * Traffic classification
+  * Runtime validation
+  * SDK generation
+  * Server-side code
+* Specs improve the API design process
+
+<!-- livebook:{"break_markdown":true} -->
+
+The API's job is to make the developer as succesful as possible. The orientation for APIs is to think about design choices from the application developer's point of view.
+
+## Better API Design with OpenAPI
+
+1. Invest in API design
+2. Leverage specifications in the lifecycle
+3. Work with OpenAPI's opinions
+
+## OAS - OpenAPI Specification
+
+OAS (formerly known as Swagger) is a specification for building APIs. OAS defines a standard, language-agnostic interface to RESTful APIs. Allows both humans and computers to understand the capabilities of a service without accessing its source code or seeing further documentation.
+
+## Major Components
+
+* OpenAPI Object: The root document object of the OAS document.
+* Info Object: Provides metadata about the API like title, version, and other details.
+* Paths Object: Defines the available paths and operations for the API.
+* Components Object: A set of reusable objects for different aspects of the OAS.
+* Can include schemas (like JSON schemas for request and response bodies), parameters, responses, examples, request bodies, headers, security schemes, links, callbacks, and more.
+
+## Building a REST API with Elixir and Phoenix
+
+Elixir and Phoenix to use for a project. Here, we are going to create a REST API which delivers users information to a Postgres database.
+
+The API will serve user information under /api/users, with GET, PUT, POST, DELETE requests.
+
+To do this, we need to create database schema with required fields that are stored in the database:
+
+1. `id` → **Primary key in the table.**
+2. `name` → **String contains user name.**
+3. `email` → **Email field, it should be unique.**
+4. `role` → **User role.**
+5. `address` → **User address.**
