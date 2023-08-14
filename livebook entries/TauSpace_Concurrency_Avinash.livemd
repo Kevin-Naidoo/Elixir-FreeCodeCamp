@@ -442,3 +442,11 @@ WorkerA.get_state()
 ```elixir
 WorkerB.get_state()
 ```
+
+```elixir
+WorkerB.increment()
+```
+
+```elixir
+WorkerB.get_state()
+```
