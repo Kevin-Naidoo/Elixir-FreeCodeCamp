@@ -1,0 +1,201 @@
+# Runtime introspection with Mermaid and VegaLite
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.11.0"},
+  {:kino_vega_lite, "~> 0.1.10"}
+])
+```
+
+## Section
+
+```elixir
+import Kino.Shorts
+```
+
+```elixir
+self()
+```
+
+```elixir
+parent = self()
+
+child =
+  spawn(fn ->
+    receive do
+      :ping -> send(parent, :pong)
+    end
+  end)
+
+send(child, :ping)
+
+receive do
+  :pong -> :ponged!
+end
+```
+
+```elixir
+parent = self()
+
+Kino.Process.render_seq_trace(fn ->
+  child =
+    spawn(fn ->
+      receive do
+        :ping -> send(parent, :pong)
+      end
+    end)
+
+  send(child, :ping)
+
+  receive do
+    :pong -> :ponged!
+  end
+end)
+```
+
+```elixir
+Kino.Process.render_seq_trace(fn ->
+  1..4
+  |> Task.async_stream(fn i ->
+    Process.sleep(Enum.random(100..300))
+    i
+  end)
+  |> Stream.run()
+end)
+```
+
+```elixir
+{:ok, supervisor} =
+  Supervisor.start_link(
+    [
+      {Task, fn -> Process.sleep(:infinity) end},
+      {Agent, fn -> [] end}
+    ],
+    strategy: :one_for_one
+  )
+```
+
+```elixir
+Kino.Process.render_sup_tree(supervisor)
+```
+
+```elixir
+supervisor
+```
+
+```elixir
+Kino.Process.render_app_tree(:kino)
+```
+
+```elixir
+Kino.Process.render_app_tree(:elixir)
+```
+
+```elixir
+Application.started_applications()
+```
+
+```elixir
+IO.puts(node())
+IO.puts(Node.get_cookie())
+```
+
+```elixir
+node =
+  "Node"
+  |> read_text(default: node())
+  |> String.to_atom()
+
+cookie =
+  "Cookie"
+  |> read_text(default: Node.get_cookie())
+  |> String.to_atom()
+
+Node.set_cookie(node, cookie)
+true = Node.connect(node)
+```
+
+```elixir
+Node.spawn(node, fn ->
+  IO.inspect(node())
+end)
+```
+
+```elixir
+remote_pids = :erpc.call(node, Process, :list, [])
+```
+
+```elixir
+processes =
+  Enum.map(remote_pids, fn pid ->
+    # Extract interesting process information
+    info = :erpc.call(node, Process, :info, [pid, [:reductions, :memory, :status]])
+    # The result of inspect(pid) is relative to the node
+    # where it was called, that's why we call it on the remote node
+    pid_inspect = :erpc.call(node, Kernel, :inspect, [pid])
+
+    %{
+      pid: pid_inspect,
+      reductions: info[:reductions],
+      memory: info[:memory],
+      status: info[:status]
+    }
+  end)
+```
+
+```elixir
+alias VegaLite, as: Vl
+
+Vl.new(width: 600, height: 400)
+|> Vl.data_from_values(processes)
+|> Vl.mark(:point, tooltip: true)
+|> Vl.encode_field(:x, "reductions", type: :quantitative, scale: [type: "log", base: 10])
+|> Vl.encode_field(:y, "memory", type: :quantitative, scale: [type: "log", base: 10])
+|> Vl.encode_field(:color, "status", type: :nominal)
+|> Vl.encode_field(:tooltip, "pid", type: :nominal)
+```
+
+```elixir
+:erlang.memory()
+```
+
+```elixir
+memory_plot =
+  Vl.new(width: 600, height: 400, padding: 20)
+  |> Vl.repeat(
+    [layer: ["total", "processes", "atom", "binary", "code", "ets"]],
+    Vl.new()
+    |> Vl.mark(:line)
+    |> Vl.encode_field(:x, "iter", type: :quantitative, title: "Measurement")
+    |> Vl.encode_repeat(:y, :layer, type: :quantitative, title: "Memory usage (MB)")
+    |> Vl.encode(:color, datum: [repeat: :layer], type: :nominal)
+  )
+  |> Kino.VegaLite.new()
+```
+
+```elixir
+Kino.VegaLite.periodically(memory_plot, 200, 1, fn i ->
+  point =
+    :erpc.call(node, :erlang, :memory, [])
+    |> Enum.map(fn {type, bytes} -> {type, bytes / 1_000_000} end)
+    |> Map.new()
+    |> Map.put(:iter, i)
+
+  Kino.VegaLite.push(memory_plot, point, window: 1000)
+  {:cont, i + 1}
+end)
+```
+
+```elixir
+for i <- 1..10_000 do
+  String.duplicate("cat", i)
+end
+```
+
+```elixir
+tid = :ets.new(:users, [:set, :public])
+
+for i <- 1..1_000_000 do
+  :ets.insert(tid, {i, "User #{i}"})
+end
+```

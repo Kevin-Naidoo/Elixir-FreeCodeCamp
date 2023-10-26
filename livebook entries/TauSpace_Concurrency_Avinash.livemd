@@ -219,7 +219,7 @@ send(pid, "Hello TauSpace")
 send(pid, :exit)
 ```
 
-Aftr sending the normal exit, the pid has terminated the process. There is no longer a receiver running.
+After sending the normal exit, the pid has terminated the process. There is no longer a receiver running.
 
 ```elixir
 send(pid, "Hello Monte")
